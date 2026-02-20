@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TriPeaks Solver</string>
+    <string name="accessibility_service_description">Analyzes Disney Solitaire game state and provides optimal solutions. Tap cards to let the AI play automatically.</string>
+</resources>
