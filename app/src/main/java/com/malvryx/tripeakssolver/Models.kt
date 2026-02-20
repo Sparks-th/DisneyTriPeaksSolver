@@ -48,47 +48,26 @@ data class Card(
  * Complete board state for TriPeaks
  */
 data class BoardState(
-    val pyramids: List<List<Card?>>,  // 3 pyramids, each with 4 rows
-    val waste: List<Card>,            // Waste pile (top card is playable)
-    val stock: List<Card>,            // Draw pile
+    val tableCards: List<Card?>,      // All 28 cards in layout (3 peaks + rows)
+    val waste: List<Card>,             // Waste pile (top card is playable)
+    val stock: List<Card>,             // Draw pile
     val removed: Set<Card> = emptySet() // Removed cards
 ) {
     val wasteTop: Card? get() = waste.lastOrNull()
     val stockSize: Int get() = stock.size
-    val cardsRemaining: Int get() = pyramids.flatten().count { it != null }
+    val cardsRemaining: Int get() = tableCards.count { it != null }
     
     fun isWin(): Boolean = cardsRemaining == 0
     
     fun getPlayableCards(): List<Card> {
-        val playable = mutableListOf<Card>()
-        
-        pyramids.forEachIndexed { pyramidIdx, pyramid ->
-            pyramid.forEachIndexed { rowIdx, row ->
-                row.forEachIndexed { colIdx, card ->
-                    if (card != null && card.isFaceUp && isCardPlayable(pyramidIdx, rowIdx, colIdx)) {
-                        playable.add(card)
-                    }
-                }
-            }
-        }
-        
-        return playable
-    }
-    
-    private fun isCardPlayable(pyramidIdx: Int, row: Int, col: Int): Boolean {
-        // Card is playable if no cards cover it (nothing in row below)
-        if (row == pyramids[pyramidIdx].lastIndex) return true
-        
-        val nextRow = pyramids[pyramidIdx][row + 1]
-        // Check if positions below are empty
-        return nextRow.getOrNull(col) == null && nextRow.getOrNull(col + 1) == null
+        // Simplified: all face-up cards at bottom row are playable
+        return tableCards.filterNotNull().filter { it.isFaceUp }
     }
     
     fun toHash(): String {
-        // Create unique hash for state detection
-        val pyramidHash = pyramids.flatten().joinToString(",") { it?.toString() ?: "X" }
+        val tableHash = tableCards.joinToString(",") { it?.toString() ?: "X" }
         val wasteHash = wasteTop?.toString() ?: "empty"
-        return "$pyramidHash|$wasteHash|${stock.size}"
+        return "$tableHash|$wasteHash|${stock.size}"
     }
 }
 
