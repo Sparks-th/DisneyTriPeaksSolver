@@ -170,11 +170,9 @@ class TriPeaksSolver {
      * Apply a card play move to create new state
      */
     private fun applyMove(state: BoardState, card: Card): BoardState {
-        val newPyramids: List<List<List<Card?>>> = state.pyramids.map { pyramid ->
-            pyramid.map { row ->
-                row.map { c ->
-                    if (c == card) null else c
-                }
+        val newPyramids = state.pyramids.map { row ->
+            row.map { c ->
+                if (c == card) null else c
             }
         }
         
@@ -218,26 +216,37 @@ object BoardGenerator {
      * Create a simple solvable test board
      */
     fun createTestBoard(): BoardState {
-        // Simple pyramid for testing
-        val pyramid1: List<List<Card?>> = listOf(
-            listOf(card("K", "H", 0, 0, 0)),
-            listOf(card("Q", "D", 0, 1, 0), card("J", "C", 0, 1, 1)),
-            listOf(card("10", "H", 0, 2, 0), card("9", "S", 0, 2, 1), card("8", "D", 0, 2, 2)),
-            listOf(card("7", "C", 0, 3, 0), card("6", "H", 0, 3, 1), card("5", "D", 0, 3, 2), card("4", "S", 0, 3, 3))
-        )
+        // Create all cards for all pyramids in a flat 2D structure
+        // Row 0: 3 peaks (one from each pyramid)
+        // Row 1: 6 cards (2 from each pyramid)
+        // Row 2: 9 cards (3 from each pyramid)
+        // Row 3: 12 cards (4 from each pyramid)
         
-        val pyramid2: List<List<Card?>> = listOf(
-            listOf(card("A", "C", 1, 0, 0)),
-            listOf(card("2", "H", 1, 1, 0), card("3", "D", 1, 1, 1)),
-            listOf(card("4", "C", 1, 2, 0), card("5", "S", 1, 2, 1), card("6", "H", 1, 2, 2)),
-            listOf(card("7", "D", 1, 3, 0), card("8", "C", 1, 3, 1), card("9", "H", 1, 3, 2), card("10", "S", 1, 3, 3))
-        )
-        
-        val pyramid3: List<List<Card?>> = listOf(
-            listOf(card("Q", "H", 2, 0, 0)),
-            listOf(card("J", "D", 2, 1, 0), card("10", "C", 2, 1, 1)),
-            listOf(card("9", "H", 2, 2, 0), card("8", "S", 2, 2, 1), card("7", "D", 2, 2, 2)),
-            listOf(card("6", "C", 2, 3, 0), card("5", "H", 2, 3, 1), card("4", "D", 2, 3, 2), card("3", "S", 2, 3, 3))
+        val allCards = listOf(
+            // Row 0 - Peaks
+            listOf(
+                card("K", "H", 0, 0, 0),  // Pyramid 1 peak
+                card("A", "C", 1, 0, 0),  // Pyramid 2 peak
+                card("Q", "H", 2, 0, 0)   // Pyramid 3 peak
+            ),
+            // Row 1
+            listOf(
+                card("Q", "D", 0, 1, 0), card("J", "C", 0, 1, 1),  // Pyramid 1
+                card("2", "H", 1, 1, 0), card("3", "D", 1, 1, 1),  // Pyramid 2
+                card("J", "D", 2, 1, 0), card("10", "C", 2, 1, 1)  // Pyramid 3
+            ),
+            // Row 2
+            listOf(
+                card("10", "H", 0, 2, 0), card("9", "S", 0, 2, 1), card("8", "D", 0, 2, 2),  // Pyramid 1
+                card("4", "C", 1, 2, 0), card("5", "S", 1, 2, 1), card("6", "H", 1, 2, 2),   // Pyramid 2
+                card("9", "H", 2, 2, 0), card("8", "S", 2, 2, 1), card("7", "D", 2, 2, 2)    // Pyramid 3
+            ),
+            // Row 3
+            listOf(
+                card("7", "C", 0, 3, 0), card("6", "H", 0, 3, 1), card("5", "D", 0, 3, 2), card("4", "S", 0, 3, 3),  // Pyramid 1
+                card("7", "D", 1, 3, 0), card("8", "C", 1, 3, 1), card("9", "H", 1, 3, 2), card("10", "S", 1, 3, 3), // Pyramid 2
+                card("6", "C", 2, 3, 0), card("5", "H", 2, 3, 1), card("4", "D", 2, 3, 2), card("3", "S", 2, 3, 3)   // Pyramid 3
+            )
         )
         
         val stock = listOf(
@@ -247,8 +256,8 @@ object BoardGenerator {
         )
         
         return BoardState(
-            pyramids = listOf(pyramid1, pyramid2, pyramid3),
-            waste = listOf(card("5", "C", -1, 0, 0)),  // Starting waste card
+            pyramids = allCards,
+            waste = listOf(card("5", "C", -1, 0, 0)),
             stock = stock
         )
     }
