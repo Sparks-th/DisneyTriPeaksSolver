@@ -25,11 +25,16 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+    - name: Install Gradle Wrapper
+      run: |
+        gradle wrapper --gradle-version 8.4
+        chmod +x gradlew
+
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@v2
 
     - name: Build Debug APK
-      run: ./gradlew assembleDebug --stacktrace
+      run: ./gradlew assembleDebug --stacktrace --info
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
@@ -42,4 +47,4 @@ jobs:
       run: |
         echo "✅ APK built successfully!"
         echo "Download the APK from the Artifacts section above"
-        ls -lh app/build/outputs/apk/debug/
+        ls -lh app/build/outputs/apk/debug/ || echo "APK directory not found"
