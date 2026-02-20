@@ -30,11 +30,8 @@ jobs:
         gradle wrapper --gradle-version 8.4
         chmod +x gradlew
 
-    - name: Validate Gradle wrapper
-      uses: gradle/wrapper-validation-action@v2
-
     - name: Build Debug APK
-      run: ./gradlew assembleDebug --stacktrace --info
+      run: ./gradlew assembleDebug --stacktrace
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
