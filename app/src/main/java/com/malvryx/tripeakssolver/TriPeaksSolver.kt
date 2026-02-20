@@ -170,7 +170,7 @@ class TriPeaksSolver {
      * Apply a card play move to create new state
      */
     private fun applyMove(state: BoardState, card: Card): BoardState {
-        val newPyramids = state.pyramids.map { pyramid ->
+        val newPyramids: List<List<List<Card?>>> = state.pyramids.map { pyramid ->
             pyramid.map { row ->
                 row.map { c ->
                     if (c == card) null else c
@@ -219,21 +219,21 @@ object BoardGenerator {
      */
     fun createTestBoard(): BoardState {
         // Simple pyramid for testing
-        val pyramid1 = listOf(
+        val pyramid1: List<List<Card?>> = listOf(
             listOf(card("K", "H", 0, 0, 0)),
             listOf(card("Q", "D", 0, 1, 0), card("J", "C", 0, 1, 1)),
             listOf(card("10", "H", 0, 2, 0), card("9", "S", 0, 2, 1), card("8", "D", 0, 2, 2)),
             listOf(card("7", "C", 0, 3, 0), card("6", "H", 0, 3, 1), card("5", "D", 0, 3, 2), card("4", "S", 0, 3, 3))
         )
         
-        val pyramid2 = listOf(
+        val pyramid2: List<List<Card?>> = listOf(
             listOf(card("A", "C", 1, 0, 0)),
             listOf(card("2", "H", 1, 1, 0), card("3", "D", 1, 1, 1)),
             listOf(card("4", "C", 1, 2, 0), card("5", "S", 1, 2, 1), card("6", "H", 1, 2, 2)),
             listOf(card("7", "D", 1, 3, 0), card("8", "C", 1, 3, 1), card("9", "H", 1, 3, 2), card("10", "S", 1, 3, 3))
         )
         
-        val pyramid3 = listOf(
+        val pyramid3: List<List<Card?>> = listOf(
             listOf(card("Q", "H", 2, 0, 0)),
             listOf(card("J", "D", 2, 1, 0), card("10", "C", 2, 1, 1)),
             listOf(card("9", "H", 2, 2, 0), card("8", "S", 2, 2, 1), card("7", "D", 2, 2, 2)),
